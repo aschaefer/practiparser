@@ -18,10 +18,10 @@ public class ShooterRecord {
 	private String divisionCode = "";
 	
 	public String toCsv(){
-		return "EC, " + shooterNumber + ", " + shooterScsaId + ", " + firstName + ", " + lastName +  ", " + colF +  ", " + colG +  ", " + colH +  ", " + colI +  ", " + colJ +  ", " + colK +  ", " + colL;
+		return "EC," + shooterNumber + "," + shooterScsaId + "," + firstName + "," + lastName +  "," + colF +  "," + colG +  "," + colH +  "," + colI +  "," + colJ +  "," + colK +  "," + colL+",,,,,,,,,,,,,,";
 	}
 	public String toEsCsv(){
-		return "ES, 1, " + shooterNumber + ", "+divisionCode+", ?, ?, " + totalTime + "TRUE, FALSE," + totalTime;
+		return "ES,1," + shooterNumber + ","+divisionCode+",?,?," + totalTime + "TRUE,FALSE," + totalTime + ",,,,,,,,,,,,,,,,";
 	}
 	public int getShooterNumber() {
 		return shooterNumber;
