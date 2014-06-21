@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +48,7 @@ public class PractiParser {
 		List<ShooterRecord> lrPistolMatchShooters = new ArrayList<ShooterRecord>();
 		int shooterNum = 1;
 		Map<String, MatchShooter> shooterMap = new HashMap<String, MatchShooter>();
+		Map<String, ShooterRecord> shooterRecordMap = new HashMap<String, ShooterRecord>();
 		
 		Set<String> divisionsInUse = new HashSet<String>();
 		Set<String> lrRifleDivisionsInUse = new HashSet<String>();
@@ -57,8 +60,9 @@ public class PractiParser {
 		Set<String> lrPistolStages = new HashSet<String>();
 		
 		for (MatchShooter shooter : definition.getMatchShooters()) {
-			shooterMap.put(shooter.getShUuid(), shooter);
 			ShooterRecord shooterRecord = new ShooterRecord();
+			shooterMap.put(shooter.getShUuid(), shooter);
+			shooterRecordMap.put(shooter.getShUuid(), shooterRecord);
 			shooterRecord.setFirstName(shooter.getShFn());
 			shooterRecord.setLastName(shooter.getShLn());
 			shooterRecord.setShooterScsaId(shooter.getShId());
@@ -68,7 +72,7 @@ public class PractiParser {
 			String sex = shooter.getShGen(); //MALE for male
 			String adult = shooter.getShAge(); //ADULT for adult
 			boolean disqualified = shooter.getShDq(); 
-			System.out.println(division);
+			//System.out.println(division);
 
 			if ( "IPSC".equals(division)){
 				shooterRecord.setDivisionCode("IPRD");
@@ -101,8 +105,6 @@ public class PractiParser {
 				mainMatchShooters.add(shooterRecord);
 			}
 			
-			// TODO: Looks like these need to go into a different "match" 
-			// as ezSteel will not allow them in a regular match
 			if ( "Rimfire Pistol Iron".equals(division)){
 				shooterRecord.setDivisionCode("RFPI");
 				lrPistolDivisionsInUse.add("RFPI");
@@ -130,40 +132,45 @@ public class PractiParser {
 		for (MatchStage stage : definition.getMatchStages()) {
 			stageMap.put(stage.getStageUuid(), stage);
 		}
-		
+		List<String> stageList = new ArrayList<String>();
 		// Build data structures
 		for (MatchScore score : scores.getMatchScores()) {
 			MatchStage stage = stageMap.get(score.getStageUuid());
-			System.out.println("Scores for Stage " + score.getStageNumber()
-					+ " - " + stage.getStageName());
+			stageList.add(stage.getStageName());
+//			System.out.println("Scores for Stage " + score.getStageNumber()
+//					+ " - " + stage.getStageName());
 
 			for (StageStagescore stageScore : score.getStageStagescores()) {
 
 				MatchShooter shooter = shooterMap.get(stageScore.getShtr());
+				ShooterRecord shooterRecord = shooterRecordMap.get(stageScore.getShtr());
 
-				if (shooter != null) {
-					System.out.print(shooter.getShFn() + " "
-							+ shooter.getShLn() + " : ");
-				} else {
-					System.out.print("UNKNOWN SHOOTER");
-				}
-
-				if (stageScore.getDnf()) {
-					System.out.print(" **DNF** ");
-				}
-				System.out.print(shooter.getShDvp() + " ");
+//				if (shooter != null) {
+//					System.out.print(shooter.getShFn() + " "
+//							+ shooter.getShLn() + " : ");
+//				} else {
+//					System.out.print("UNKNOWN SHOOTER");
+//				}
+//
+//				if (stageScore.getDnf()) {
+//					System.out.print(" **DNF** ");
+//				}
+//				System.out.print(shooter.getShDvp() + " ");
 				double totalTime = 0;
 				double worstTime = 0;
 				for (double str : stageScore.getStr()) {
-					System.out.print(str + ",");
+					//System.out.print(str + ",");
 					totalTime += str;
 					if (str > worstTime) {
 						worstTime = str;
 					}
 				}
 				totalTime -= worstTime;
-				System.out.print("(" + totalTime + ")");
-				System.out.println();
+				// Round to hundredths
+				totalTime = Math.round(totalTime * 100.0) / 100.0;
+				shooterRecord.setTotalTime(totalTime + shooterRecord.getTotalTime());
+//				System.out.print("(" + totalTime + ")");
+//				System.out.println();
 			}
 		}
 		
@@ -179,21 +186,29 @@ public class PractiParser {
 			lineCount++;
 			csvWriter.write("ER,"+clubID+",1,"+clubName+","+startDate+","+endDate + ",,,,,,,,,,,,,,,,,,,," + CR);
 			lineCount++;
+			int shooterCount = 0;
+			int shooersWithIdCount = 0;
 			for ( ShooterRecord shooter: allShooters){
 				csvWriter.write(shooter.toCsv() + CR);
 				lineCount++;
+				shooterCount++;
+				if ( shooter.getShooterScsaId() != null && !"".equals(shooter.getShooterScsaId())){
+					shooersWithIdCount++;
+				}
 			}
-			// List competitors EC
-			// FE line - ?? Possibly sum of all competitors, and all competitors with SCSA number
-			
+			//TODO: make sure that the 2nd number does reflect the # of shooters with SCSA IDs
+			//TODO: Figure out what the 3rd number is
+			csvWriter.write("FE,"+shooterCount+","+shooersWithIdCount+",??,"+shooterCount+",,,,,,,,,,,,,,,,,,,," + CR);
+						
 			//TODO: Only use match types if they were in PS output
+			int numMatches = 3;
 			csvWriter.write("MR,1,Main Match,SC,,,,,,,,,,,,,,,,,,,,," + CR);
 			lineCount++;
 			csvWriter.write("MR,2,Rimfire Pistol,SC,,,,,,,,,,,,,,,,,,,,," + CR);
 			lineCount++;
 			csvWriter.write("MR,3,Rimfire Rifle,SC,,,,,,,,,,,,,,,,,,,,," + CR);
 			lineCount++;
-
+			
 			
 			// List Divisions
 			if ( divisionsInUse.contains("IPRD")){
@@ -236,8 +251,6 @@ public class PractiParser {
 				csvWriter.write("DR,Rimfire Rifle Open,RFRO,3,,,,,,,,,,,,,,,,,,,,,," + CR);
 				lineCount++;
 			}
-
-			
 			if ( divisionsInUse.contains("RFPI")){
 				csvWriter.write("DR,Rimfire Iron,RFRI,1,,,,,,,,,,,,,,,,,,,,,," + CR);
 				lineCount++;
@@ -254,18 +267,112 @@ public class PractiParser {
 				csvWriter.write("DR,Rimfire Rifle Open,SS,1,,,,,,,,,,,,,,,,,,,,,," + CR);
 				lineCount++;
 			}
-//			if ( divisionsInUse.contains("IPRD")){
-//				csvWriter.write("DR, IPSC Production, IPRD, 1" + CR);
-//			}
+			
+			for ( int matchNum = 1; matchNum < numMatches+1; matchNum++){
+				int stageOrder = 1;
+				for (String stage: stageList){
+					String stageName = "";
+					String stageNum = "";
+					String numStrings = "5";
+					String flightTime = "";
+					if ( stage.toLowerCase().indexOf("pend") != -1){
+						stageName = "Pendulum";
+						stageNum = "SC-106";
+						flightTime = "0.03";
+					}
+					if ( stage.toLowerCase().indexOf("smoke") != -1){
+						stageName = "Smoke & Hope";
+						stageNum = "SC-103";
+						flightTime = "0.05";
+					}
+					if ( stage.toLowerCase().indexOf("round") != -1){
+						stageName = "Roundabout";
+						stageNum = "SC-108";
+						flightTime = "0.03";
+					}
+					if ( stage.toLowerCase().indexOf("accel") != -1){
+						stageName = "Accelerator";
+						stageNum = "SC-105";
+						flightTime = "0.06";
+					}
+					if ( stage.toLowerCase().indexOf("show") != -1){
+						stageName = "Showdown";
+						stageNum = "SC-102";
+						flightTime = "0.04";
+					}
+					if ( stage.toLowerCase().indexOf("five") != -1){
+						stageName = "Five To Go";
+						stageNum = "SC-101";
+						flightTime = "0.03";
+					}
+					//TODO: Fill in the rest of the stages
+	
+					csvWriter.write("ST,"+stageName+","+stageNum+","+(stageOrder++)+","+matchNum+","+numStrings+",?,"+flightTime+",?,,,,,,,,,,,,,,,,," + CR);
+				}
+			}
+			int coNum = 1;
+			
 			// List Stages
 			// CO lines - ??
 
-			// Ordered by what?
+			// Order by time, lowest first.
+			Comparator<ShooterRecord> scoreSorter = new Comparator<ShooterRecord>() {
+			    public int compare(ShooterRecord s1, ShooterRecord s2) {
+			        if ( s1.getTotalTime() > s2.getTotalTime()){
+			        	return 1;
+			        } else {
+			        	return -1;
+			        }
+			    }
+			};
+			// List scores per competitor per stage. Ordered by match #, then competitor #, then stage #
+
+			Collections.sort(mainMatchShooters, scoreSorter);
+			int place = 1;
 			for ( ShooterRecord shooter: mainMatchShooters){
-				csvWriter.write(shooter.toEsCsv() + CR);
+				csvWriter.write(shooter.toEsCsv(1, place++) + CR);
 				lineCount++;
 			}
-			// List scores per competitor per stage. Ordered by match #, then competitor #, then stage #
+			Collections.sort(lrPistolMatchShooters, scoreSorter);
+			place = 1;
+			for ( ShooterRecord shooter: lrPistolMatchShooters){
+				csvWriter.write(shooter.toEsCsv(2, place++) + CR);
+				lineCount++;
+			}
+			Collections.sort(lrRifleMatchShooters, scoreSorter);
+			place = 1;
+			for ( ShooterRecord shooter: lrRifleMatchShooters){
+				csvWriter.write(shooter.toEsCsv(3, place++) + CR);
+				lineCount++;
+			}
+			
+			
+			Comparator<ShooterRecord> shooerOrder = new Comparator<ShooterRecord>() {
+			    public int compare(ShooterRecord s1, ShooterRecord s2) {
+			        if ( s1.getShooterNumber() > s2.getShooterNumber()){
+			        	return 1;
+			        } else {
+			        	return -1;
+			        }
+			    }
+			};
+			
+			Collections.sort(mainMatchShooters, shooerOrder);
+			for ( ShooterRecord shooter: mainMatchShooters){
+				csvWriter.write(shooter.toSsCsv(1, CR));
+				lineCount++;
+			}
+			Collections.sort(lrPistolMatchShooters, shooerOrder);
+			for ( ShooterRecord shooter: lrPistolMatchShooters){
+				csvWriter.write(shooter.toSsCsv(2, CR));
+				lineCount++;
+			}
+			Collections.sort(lrRifleMatchShooters, shooerOrder);
+			for ( ShooterRecord shooter: lrRifleMatchShooters){
+				csvWriter.write(shooter.toSsCsv(3, CR));
+				lineCount++;
+			}
+			
 			// ZZ line - total line count?
 			csvWriter.write("ZZ,"+ (++lineCount) +",,,,,,,,,,,,,,,,,,,,,,,,"+ CR);
 			csvWriter.flush();

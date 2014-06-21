@@ -1,5 +1,8 @@
 package nu.schaefer.practiparser.scsa;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShooterRecord {
 	private int shooterNumber;
 	private String shooterScsaId;
@@ -12,16 +15,33 @@ public class ShooterRecord {
 	private String colJ = "FALSE";
 	private String colK = "FALSE";
 	private String colL = "FALSE";
+	private List<List<Double>> stageScores = new ArrayList<List<Double>>();
+	private boolean disqualified = false;
+	private boolean dnf = false;
+	private int place = -1;
+	private int stagesScored = 0;
 	
 	// Needed for Es Line
-	private String totalTime = "";
+	private double totalTime = 0;
 	private String divisionCode = "";
+	private String classCode = "";
 	
 	public String toCsv(){
 		return "EC," + shooterNumber + "," + shooterScsaId + "," + firstName + "," + lastName +  "," + colF +  "," + colG +  "," + colH +  "," + colI +  "," + colJ +  "," + colK +  "," + colL+",,,,,,,,,,,,,,";
 	}
-	public String toEsCsv(){
-		return "ES,1," + shooterNumber + ","+divisionCode+",?,?," + totalTime + "TRUE,FALSE," + totalTime + ",,,,,,,,,,,,,,,,";
+	public String toEsCsv(int matchNum, int place){
+		totalTime = Math.round(totalTime * 100.0) / 100.0;
+		return "ES,"+matchNum+"," + shooterNumber + ","+divisionCode+","+place+",?," + totalTime + ",TRUE,FALSE," + totalTime + ",,,,,,,,,,,,,,,,";
+	}
+	public String toSsCsv(int matchNum, String CR){
+		StringBuilder sb = new StringBuilder();
+		int stageNum = 1;
+		for (List<Double> stageScore: stageScores){
+			for ( Double score: stageScore){
+				sb.append("SS,"+matchNum+","+(stageNum++) +","+shooterNumber+",8.00,2.00,0,FALSE,2.00,0,FALSE,2.00,0,FALSE,4.00,0,FALSE,2.00,0,FALSE,,,,,,");
+			}
+		}
+		return "";
 	}
 	public int getShooterNumber() {
 		return shooterNumber;
@@ -111,11 +131,11 @@ public class ShooterRecord {
 		this.colL = colL;
 	}
 	
-	public String getTotalTime() {
+	public double getTotalTime() {
 		return totalTime;
 	}
 	
-	public void setTotalTime(String totalTime) {
+	public void setTotalTime(double totalTime) {
 		this.totalTime = totalTime;
 	}
 	public String getDivisionCode() {
@@ -124,6 +144,52 @@ public class ShooterRecord {
 	public void setDivisionCode(String divisionCode) {
 		this.divisionCode = divisionCode;
 	}
-	
-	
+	public List<List<Double>> getStageScores() {
+		return stageScores;
+	}
+	public void setStageScores(List<List<Double>> stageScores) {
+		this.stageScores = stageScores;
+	}
+	public boolean isDisqualified() {
+		return disqualified;
+	}
+	public void setDisqualified(boolean disqualified) {
+		this.disqualified = disqualified;
+	}
+	public boolean isDnf() {
+		if ( stagesScored != 5){
+			return true;
+		}
+		return dnf;
+	}
+	public void setDnf(boolean dnf) {
+		this.dnf = dnf;
+	}
+	public int getPlace() {
+		return place;
+	}
+	public void setPlace(int place) {
+		this.place = place;
+	}
+	public int getStagesScored() {
+		return stagesScored;
+	}
+	public void setStagesScored(int stagesScored) {
+		this.stagesScored = stagesScored;
+	}
+	public String getClassCode() {
+		return classCode;
+	}
+	public void setClassCode(String classCode) {
+		this.classCode = classCode;
+	}
+	@Override
+	public String toString() {
+		return "ShooterRecord [shooterNumber=" + shooterNumber
+				+ ", shooterScsaId=" + shooterScsaId + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", stageScores="
+				+ stageScores + ", disqualified=" + disqualified + ", place="
+				+ place + ", totalTime=" + totalTime + ", divisionCode="
+				+ divisionCode  + ", dnf="+ isDnf() + ", stagesScored="+ stagesScored  + ", class="+ classCode+ "]";
+	}
 }
