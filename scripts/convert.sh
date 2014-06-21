@@ -1,137 +1,70 @@
-cp ~/Downloads/tmp/*.json .
-cat match_scores.json | sed s/match_scores/matchScores/g > foo
-mv foo  match_scores.json
-cat match_scores.json | sed s/stage_stagescores/stageStagescores/g > foo
-mv foo  match_scores.json
-cat match_scores.json | sed s/stage_number/stageNumber/g > foo
-mv foo  match_scores.json
-cat match_scores.json | sed s/stage_uuid/stageUuid/g > foo
-mv foo  match_scores.json
-cat match_scores.json | sed s/match_id/matchId/g > foo
-mv foo  match_scores.json
+scoreFile=$1;
+defFile=$2;
+#cp ~/Downloads/tmp/*.json .
+sed -i bak -e s/match_scores/matchScores/g $scoreFile
+sed -i bak -e s/stage_stagescores/stageStagescores/g $scoreFile
+sed -i bak -e s/stage_number/stageNumber/g $scoreFile
+sed -i bak -e s/stage_uuid/stageUuid/g $scoreFile
+sed -i bak -e s/match_id/matchId/g $scoreFile
 
-cat match_def.json | sed s/match_id/matchId/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_type/matchType/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_date/matchDate/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_cats/matchCats/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_approvescores/matchApprovescores/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_name/matchName/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_readonly/matchReadonly/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_bonuses/matchBonuses/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_penalties/matchPenalties/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/pen_val/penVal/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/pen_bin/penBin/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/pen_name/penName/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_cls/matchCls/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_logenabled/matchLogenabled/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_stages/matchStages/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_modifieddate/matchModifieddate/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_shooters/matchShooters/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_creationdate/matchCreationdate/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/match_owner/matchOwner/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_poppers/stagePoppers/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_number/stageNumber/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_uuid/stageUuid/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_targets/stageTargets/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_name/stageName/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_classifier/stageClassifier/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_scoretype/stageScoretype/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_modifieddate/stageModifieddate/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_classifiercode/stageClassifiercode/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_strings/stageStrings/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_noshoots/stageNoshoots/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/stage_tppoints/stageTppoints/g > foo
-mv foo  match_def.json
-
-
-
-cat match_def.json | sed s/mod_dl/modDl/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/mod_dq/modDq/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/mod_dv/modDv/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/mod_pf/modPf/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/mod_pr/modPr/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/mod_sq/modSq/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_age/shAge/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_cc/shCc/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_del/shDel/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_dq/shDq/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_dvp/shDvp/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_eml/shEml/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_fn/shFn/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_frn/shFrn/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_gen/shGen/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_grd/shGrd/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_id/shId/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_law/shLaw/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_lge/shLge/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_lgp/shLgp/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_ln/shLn/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_mil/shMil/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_mod/shMod/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_num/shNum/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_pf/shPf/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_ph/shPh/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_sqd/shSqd/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_uid/shUid/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_uuid/shUuid/g > foo
-mv foo  match_def.json
-cat match_def.json | sed s/sh_wlk/shWlk/g > foo
-mv foo  match_def.json
+sed -i bak -e s/match_id/matchId/g $defFile
+sed -i bak -e s/match_type/matchType/g $defFile
+sed -i bak -e s/match_date/matchDate/g $defFile
+sed -i bak -e s/match_cats/matchCats/g $defFile
+sed -i bak -e s/match_approvescores/matchApprovescores/g $defFile
+sed -i bak -e s/match_name/matchName/g $defFile
+sed -i bak -e s/match_readonly/matchReadonly/g $defFile
+sed -i bak -e s/match_bonuses/matchBonuses/g $defFile
+sed -i bak -e s/match_penalties/matchPenalties/g $defFile
+sed -i bak -e s/pen_val/penVal/g $defFile
+sed -i bak -e s/pen_bin/penBin/g $defFile
+sed -i bak -e s/pen_name/penName/g $defFile
+sed -i bak -e s/match_cls/matchCls/g $defFile
+sed -i bak -e s/match_logenabled/matchLogenabled/g $defFile
+sed -i bak -e s/match_stages/matchStages/g $defFile
+sed -i bak -e s/match_modifieddate/matchModifieddate/g $defFile
+sed -i bak -e s/match_shooters/matchShooters/g $defFile
+sed -i bak -e s/match_creationdate/matchCreationdate/g $defFile
+sed -i bak -e s/match_owner/matchOwner/g $defFile
+sed -i bak -e s/stage_poppers/stagePoppers/g $defFile
+sed -i bak -e s/stage_number/stageNumber/g $defFile
+sed -i bak -e s/stage_uuid/stageUuid/g $defFile
+sed -i bak -e s/stage_targets/stageTargets/g $defFile
+sed -i bak -e s/stage_name/stageName/g $defFile
+sed -i bak -e s/stage_classifier/stageClassifier/g $defFile
+sed -i bak -e s/stage_scoretype/stageScoretype/g $defFile
+sed -i bak -e s/stage_modifieddate/stageModifieddate/g $defFile
+sed -i bak -e s/stage_classifiercode/stageClassifiercode/g $defFile
+sed -i bak -e s/stage_strings/stageStrings/g $defFile
+sed -i bak -e s/stage_noshoots/stageNoshoots/g $defFile
+sed -i bak -e s/stage_tppoints/stageTppoints/g $defFile
+sed -i bak -e s/mod_dl/modDl/g $defFile
+sed -i bak -e s/mod_dq/modDq/g $defFile
+sed -i bak -e s/mod_dv/modDv/g $defFile
+sed -i bak -e s/mod_pf/modPf/g $defFile
+sed -i bak -e s/mod_pr/modPr/g $defFile
+sed -i bak -e s/mod_sq/modSq/g $defFile
+sed -i bak -e s/sh_age/shAge/g $defFile
+sed -i bak -e s/sh_cc/shCc/g $defFile
+sed -i bak -e s/sh_del/shDel/g $defFile
+sed -i bak -e s/sh_dq/shDq/g $defFile
+sed -i bak -e s/sh_dvp/shDvp/g $defFile
+sed -i bak -e s/sh_eml/shEml/g $defFile
+sed -i bak -e s/sh_fn/shFn/g $defFile
+sed -i bak -e s/sh_frn/shFrn/g $defFile
+sed -i bak -e s/sh_gen/shGen/g $defFile
+sed -i bak -e s/sh_grd/shGrd/g $defFile
+sed -i bak -e s/sh_id/shId/g $defFile
+sed -i bak -e s/sh_law/shLaw/g $defFile
+sed -i bak -e s/sh_lge/shLge/g $defFile
+sed -i bak -e s/sh_lgp/shLgp/g $defFile
+sed -i bak -e s/sh_ln/shLn/g $defFile
+sed -i bak -e s/sh_mil/shMil/g $defFile
+sed -i bak -e s/sh_mod/shMod/g $defFile
+sed -i bak -e s/sh_num/shNum/g $defFile
+sed -i bak -e s/sh_pf/shPf/g $defFile
+sed -i bak -e s/sh_ph/shPh/g $defFile
+sed -i bak -e s/sh_sqd/shSqd/g $defFile
+sed -i bak -e s/sh_uid/shUid/g $defFile
+sed -i bak -e s/sh_uuid/shUuid/g $defFile
+sed -i bak -e s/sh_wlk/shWlk/g $defFile
