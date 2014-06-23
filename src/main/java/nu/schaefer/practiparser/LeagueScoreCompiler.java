@@ -60,10 +60,6 @@ public class LeagueScoreCompiler {
 				int points = 100;
 				for (ShooterRecord shooter: shooters){
 					String shooterName = getShooterName(shooter.getFirstName(), shooter.getLastName());
-					boolean makeup = false;
-					if ( shooter.getLastName().toLowerCase().indexOf("makeup") != -1){
-						makeup = true;
-					}
 					if (leagueResults.get(division) == null){
 						leagueResults.put(division, new HashMap<String, List<LeaguePoints>>());
 					}
@@ -78,28 +74,41 @@ public class LeagueScoreCompiler {
 					List<LeaguePoints> pointsForShooter = divisionShooters.get(shooterName);
 					
 					LeaguePoints leaguePoints = pointsForShooter.get(matchNum);
-					if (makeup){
-						leaguePoints = pointsForShooter.get(matchNum-1);
+					if ( leaguePoints.isPopulated()){
+						System.out.println("!!!!!Duplicate non-makeup score encountered for shooter " + shooter.getFirstName() + " " + shooter.getLastName() + " Division: " + division + " Match: " + matchNum);
+						System.out.println("Skipping second entry");
+						continue;
+					}
+					
+					if (shooter.isMakeup()){
+						if (matchNum==0){
+							System.out.println("Shooter attempted to shoot a makeup in the first match, which is impossible");
+						} else {
+							leaguePoints = pointsForShooter.get(matchNum-1);
+						}
 						leaguePoints.setLeaguePoints(leaguePoints.getLeaguePoints()-3);
 					}
 					if (shooter.isDisqualified()) {
 						leaguePoints.setLeaguePoints(0);
 					} else {
-						leaguePoints.setLeaguePoints(points--);
+						leaguePoints.setLeaguePoints(points);
 					}
-
+					// Makeups place ordering does not count against the rest of the league shooters
+					if ( !shooter.isDnf() && !shooter.isMakeup()){
+						points--;
+					}
+					
 					leaguePoints.setTime(shooter.getTotalTime());
 					leaguePoints.setFirstName(shooter.getFirstName());
 					leaguePoints.setLastName(shooter.getLastName());
 					leaguePoints.setDq(shooter.isDisqualified());
 					leaguePoints.setDnf(shooter.isDnf());
-					leaguePoints.setMakeup(makeup);
+					leaguePoints.setMakeup(shooter.isMakeup());
 					leaguePoints.setMatchNum(matchNum);
+					leaguePoints.setPopulated(true);
 					if ( leaguePoints.isMakeup()){
 						leaguePoints.setMatchNum(matchNum-1);
 					}
-					//pointsForShooter.add(leaguePoints);
-					//matchDivisionResults.put(shooterName, leaguePoints);
 				}
 			}
 			matchNum++;
@@ -114,7 +123,7 @@ public class LeagueScoreCompiler {
 			for (String division: leagueResults.keySet()){
 				System.out.println("Division: " + division);
 				htmlWriter.append(buildTableHeader(division, tableNum++));
-				htmlWriter.append("<tbody>");
+				htmlWriter.append("<tbody>\n");
 				Map<String, List<LeaguePoints>> divisionShooters = leagueResults.get(division);
 				for (String shooterName: divisionShooters.keySet()){	
 					List<LeaguePoints> shooterLeaguePoints = divisionShooters.get(shooterName);
@@ -132,26 +141,30 @@ public class LeagueScoreCompiler {
 						}
 						double totalTime = Math.round(point.getTime() * 100.0) / 100.0;
 						leaguePointsTotal += point.getLeaguePoints();
-						sbScores.append("<td>" + totalTime + "</td><td>" + point.getLeaguePoints() );
+						sbScores.append("<td>");
+						if (point.isDq()){
+							sbScores.append("DQ");
+						} else if (point.isDnf()){
+							sbScores.append("DNF");
+						} else {
+							sbScores.append(totalTime);
+						}
+						sbScores.append("</td><td>" + point.getLeaguePoints() );
 						if ( point.isMakeup()){
 							sbScores.append(" M");
 						}
-						if ( point.isDq()){
-							sbScores.append(" DQ");
-						}
-						if ( point.isDnf()){
-							sbScores.append(" DNF");
-						}
+
+
 						sbScores.append("</td>");
 						//System.out.print(point.getTime() + ":" + point.getLeaguePoints() + ",");
 					}
 					
 					htmlWriter.append(sbName.toString() + sbScores.toString());
 					//System.out.println();
-					htmlWriter.append("<td>"+leaguePointsTotal+"</td></tr>");
+					htmlWriter.append("<td>"+leaguePointsTotal+"</td></tr>\n");
 				}
 				htmlWriter.append("</tbody>");
-				htmlWriter.append("</table>"); 
+				htmlWriter.append("</table>\n"); 
 			}
 			htmlWriter.append("</div></body></html>");
 			htmlWriter.close();
@@ -304,6 +317,14 @@ public class LeagueScoreCompiler {
 			String adult = shooter.getShAge(); //ADULT for adult
 			boolean disqualified = shooter.getShDq(); 
 			shooterRecord.setDisqualified(disqualified);
+			
+			if ( shooter.getShLn().toLowerCase().indexOf("makeup") != -1){
+				shooterRecord.setMakeup(true);
+			}
+			if (shooter.getShGrd().toLowerCase().indexOf("makeup") != -1){
+				shooterRecord.setMakeup(true);
+			}
+			
 
 			mainMatchShooters.add(shooterRecord);
 		}
@@ -320,7 +341,7 @@ public class LeagueScoreCompiler {
 
 			for (StageStagescore stageScore : score.getStageStagescores()) {
 
-				MatchShooter shooter = shooterMap.get(stageScore.getShtr());
+				//MatchShooter shooter = shooterMap.get(stageScore.getShtr());
 				ShooterRecord shooterRecord = shooterRecordMap.get(stageScore.getShtr());
 
 				double totalTime = 0;
@@ -329,6 +350,9 @@ public class LeagueScoreCompiler {
 				
 				for (double str : stageScore.getStr()) {
 					calcedScores.add(Math.min(str, 30));
+				}
+				if (stageScore.getDnf()){
+					shooterRecord.setDnf(true);
 				}
 				int scoreIndex = 0;
 				for (List<Integer> penalties: stageScore.getPenss()){
