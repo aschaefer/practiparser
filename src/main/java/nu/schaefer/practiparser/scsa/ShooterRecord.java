@@ -18,6 +18,7 @@ public class ShooterRecord {
 	private List<List<Double>> stageScores = new ArrayList<List<Double>>();
 	private boolean disqualified = false;
 	private boolean dnf = false;
+	private boolean makeup = false;
 	private int place = -1;
 	private int stagesScored = 0;
 	
@@ -183,13 +184,22 @@ public class ShooterRecord {
 	public void setClassCode(String classCode) {
 		this.classCode = classCode;
 	}
+	public boolean isMakeup() {
+		return makeup;
+	}
+	public void setMakeup(boolean makeup) {
+		this.makeup = makeup;
+	}
 	@Override
 	public String toString() {
 		return "ShooterRecord [shooterNumber=" + shooterNumber
 				+ ", shooterScsaId=" + shooterScsaId + ", firstName="
 				+ firstName + ", lastName=" + lastName + ", stageScores="
-				+ stageScores + ", disqualified=" + disqualified + ", place="
-				+ place + ", totalTime=" + totalTime + ", divisionCode="
-				+ divisionCode  + ", dnf="+ isDnf() + ", stagesScored="+ stagesScored  + ", class="+ classCode+ "]";
+				+ stageScores + ", disqualified=" + disqualified + ", dnf="
+				+ dnf + ", makeup=" + makeup + ", place=" + place
+				+ ", stagesScored=" + stagesScored + ", totalTime=" + totalTime
+				+ ", divisionCode=" + divisionCode + ", classCode=" + classCode
+				+ "]";
 	}
+
 }
