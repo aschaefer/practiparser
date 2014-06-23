@@ -10,6 +10,7 @@ public class LeaguePoints {
 	private String firstName = "";
 	private String lastName = "";
 	boolean makeup = false;
+	boolean populated = false;
 	
 	public int getLeaguePoints() {
 		return leaguePoints;
@@ -59,5 +60,10 @@ public class LeaguePoints {
 	public void setDnf(boolean dnf) {
 		this.dnf = dnf;
 	}
-	
+	public boolean isPopulated() {
+		return populated;
+	}
+	public void setPopulated(boolean populated) {
+		this.populated = populated;
+	}
 }
