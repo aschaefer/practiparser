@@ -27,7 +27,7 @@ public class LeagueScoreCompiler {
 	private static List<String> matchNames = new ArrayList<String>();
 	public static void main(String[] args) throws Exception{
 		PscUtils util = new PscUtils();
-		util.openPscFile("/Users/andrew/psc/PASteelLeagueOntelauneeMatch1_AndrewSchaefersiPhone.psc", "/tmp/league");
+		util.openPscFile("/Users/andrew/psc/PASteelLeagueOntelauneeMatch1_AndrewSchaefersiPhone-v2.psc", "/tmp/league");
 		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", "Ontelaunee Match 1", 1);
 		util.openPscFile("/Users/andrew/psc/PASteelLeagueUnamiMatch2_AndrewSchaefersiPhone.psc", "/tmp/league");
 		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", "Unami Match 2", 2);
@@ -39,6 +39,8 @@ public class LeagueScoreCompiler {
 		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", "LPRGC Match 5", 5);
 		util.openPscFile("/Users/andrew/psc/PASteelLeagueGuthsvilleMatch6_AndrewSchaefersiPhone.psc", "/tmp/league");
 		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", "Guthsville Match 6", 6);
+		util.openPscFile("/Users/andrew/psc/PASteelLeagueNewHollandMatch7_AndrewSchaefersiPhone.psc", "/tmp/league");
+		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", "New Holland Match 7", 6);
 		buildFinalReport();
 	}
 	private static void buildFinalReport() {
@@ -90,6 +92,7 @@ public class LeagueScoreCompiler {
 					leaguePoints.setFirstName(shooter.getFirstName());
 					leaguePoints.setLastName(shooter.getLastName());
 					leaguePoints.setDq(shooter.isDisqualified());
+					leaguePoints.setDnf(shooter.isDnf());
 					leaguePoints.setMakeup(makeup);
 					leaguePoints.setMatchNum(matchNum);
 					if ( leaguePoints.isMakeup()){
@@ -135,6 +138,9 @@ public class LeagueScoreCompiler {
 						}
 						if ( point.isDq()){
 							sbScores.append(" DQ");
+						}
+						if ( point.isDnf()){
+							sbScores.append(" DNF");
 						}
 						sbScores.append("</td>");
 						//System.out.print(point.getTime() + ":" + point.getLeaguePoints() + ",");
@@ -241,6 +247,14 @@ public class LeagueScoreCompiler {
 			firstName = "jim";
 			lastName = "adams";
 		}
+		if ( lastName.indexOf("halabura") != -1 && firstName.indexOf("zack") != -1){
+			firstName = "zack";
+			lastName = "halabura";
+		}
+		if ( lastName.indexOf("zack") != -1 && firstName.indexOf("halabura") != -1){
+			firstName = "zack";
+			lastName = "halabura";
+		}
 		return firstName.toLowerCase().replaceAll("makeup", "").trim() + lastName.toLowerCase().replaceAll("makeup", "").trim();
 	}
 	private static String buildTableHeader(String division, int tableNum){
@@ -268,23 +282,12 @@ public class LeagueScoreCompiler {
 		matchNames.add(matchName);
 	}
 	private static Map<String, List<ShooterRecord>> processResults(MatchScores scores, MatchDef definition, int matchNum){
-		List<ShooterRecord> allShooters = new ArrayList<ShooterRecord>();
 		List<ShooterRecord> mainMatchShooters = new ArrayList<ShooterRecord>();
-		List<ShooterRecord> lrRifleMatchShooters = new ArrayList<ShooterRecord>();
-		List<ShooterRecord> lrPistolMatchShooters = new ArrayList<ShooterRecord>();
+
 		int shooterNum = 1;
 		Map<String, MatchShooter> shooterMap = new HashMap<String, MatchShooter>();
 		Map<String, ShooterRecord> shooterRecordMap = new HashMap<String, ShooterRecord>();
-		
-		Set<String> divisionsInUse = new HashSet<String>();
-		Set<String> lrRifleDivisionsInUse = new HashSet<String>();
-		Set<String> lrPistolDivisionsInUse = new HashSet<String>();
-		
-		
-		Set<String> mainStages = new HashSet<String>();
-		Set<String> lrRifleStages = new HashSet<String>();
-		Set<String> lrPistolStages = new HashSet<String>();
-		
+				
 		for (MatchShooter shooter : definition.getMatchShooters()) {
 			ShooterRecord shooterRecord = new ShooterRecord();
 			shooterMap.put(shooter.getShUuid(), shooter);
@@ -301,11 +304,8 @@ public class LeagueScoreCompiler {
 			String adult = shooter.getShAge(); //ADULT for adult
 			boolean disqualified = shooter.getShDq(); 
 			shooterRecord.setDisqualified(disqualified);
-			//System.out.println(division);
 
 			mainMatchShooters.add(shooterRecord);
-			
-			allShooters.add(shooterRecord);
 		}
 
 		Map<String, MatchStage> stageMap = new HashMap<String, MatchStage>();
@@ -408,7 +408,7 @@ public class LeagueScoreCompiler {
 		
 		Comparator<ShooterRecord> scoreSorter = new Comparator<ShooterRecord>() {
 		    public int compare(ShooterRecord s1, ShooterRecord s2) {
-		    	return (int)(s1.getTotalTime() - s2.getTotalTime());
+		    	return Double.compare(s1.getTotalTime(), s2.getTotalTime());
 		    }
 		};
 		

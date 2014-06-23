@@ -6,6 +6,7 @@ public class LeaguePoints {
 	private int matchNum;
 	private double time;
 	private boolean dq = false;
+	private boolean dnf = false;
 	private String firstName = "";
 	private String lastName = "";
 	boolean makeup = false;
@@ -51,6 +52,12 @@ public class LeaguePoints {
 	}
 	public void setMatchNum(int matchNum) {
 		this.matchNum = matchNum;
+	}
+	public boolean isDnf() {
+		return dnf;
+	}
+	public void setDnf(boolean dnf) {
+		this.dnf = dnf;
 	}
 	
 }
