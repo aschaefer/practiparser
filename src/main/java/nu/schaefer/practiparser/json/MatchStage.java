@@ -24,6 +24,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
     "stage_uuid",
     "stage_targets",
     "stage_name",
+    "stage_deleted",
     "stage_classifier",
     "stage_scoretype",
     "stage_modifieddate",
@@ -45,6 +46,8 @@ public class MatchStage {
     private List<Object> stageTargets = new ArrayList<Object>();
     @JsonProperty("stage_name")
     private String stageName;
+    @JsonProperty("stage_deleted")
+    private Boolean stageDeleted;
     @JsonProperty("stage_classifier")
     private Boolean stageClassifier;
     @JsonProperty("stage_scoretype")
@@ -119,7 +122,17 @@ public class MatchStage {
     public void setStageName(String stageName) {
         this.stageName = stageName;
     }
+    
+    @JsonProperty("stage_deleted")
+    public Boolean getStageDeleted() {
+        return stageDeleted;
+    }
 
+    @JsonProperty("stage_deleted")
+    public void setStageDeleted(Boolean deleted) {
+        this.stageDeleted = deleted;
+    }
+    
     @JsonProperty("stage_classifier")
     public Boolean getStageClassifier() {
         return stageClassifier;
@@ -174,6 +187,7 @@ public class MatchStage {
     public Boolean getStageNoshoots() {
         return stageNoshoots;
     }
+   
 
     @JsonProperty("stage_noshoots")
     public void setStageNoshoots(Boolean stageNoshoots) {
