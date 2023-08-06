@@ -21,6 +21,8 @@ public class ShooterRecord {
 	private boolean makeup = false;
 	private int place = -1;
 	private int stagesScored = 0;
+	private int stagesInMatch = 5;
+	private int squad = -1;
 	
 	// Needed for Es Line
 	private double totalTime = 0;
@@ -158,9 +160,9 @@ public class ShooterRecord {
 		this.disqualified = disqualified;
 	}
 	public boolean isDnf() {
-		if ( stagesScored != 5){
-			return true;
-		}
+//		if ( stagesScored != stagesInMatch){
+//			return true;
+//		}
 		return dnf;
 	}
 	public void setDnf(boolean dnf) {
@@ -190,13 +192,26 @@ public class ShooterRecord {
 	public void setMakeup(boolean makeup) {
 		this.makeup = makeup;
 	}
+	public int getStagesInMatch() {
+		return stagesInMatch;
+	}
+	public void setStagesInMatch(int stagesInMatch) {
+		this.stagesInMatch = stagesInMatch;
+	}
+	
+	public int getSquad() {
+		return squad;
+	}
+	public void setSquad(int squad) {
+		this.squad = squad;
+	}
 	@Override
 	public String toString() {
 		return "ShooterRecord [shooterNumber=" + shooterNumber
 				+ ", shooterScsaId=" + shooterScsaId + ", firstName="
 				+ firstName + ", lastName=" + lastName + ", stageScores="
 				+ stageScores + ", disqualified=" + disqualified + ", dnf="
-				+ dnf + ", makeup=" + makeup + ", place=" + place
+				+ dnf + ", makeup=" + makeup + ", place=" + place + ", squad=" + squad
 				+ ", stagesScored=" + stagesScored + ", totalTime=" + totalTime
 				+ ", divisionCode=" + divisionCode + ", classCode=" + classCode
 				+ "]";
