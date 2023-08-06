@@ -11,9 +11,14 @@ public class LeaguePoints {
 	private String lastName = "";
 	boolean makeup = false;
 	boolean populated = false;
+	boolean aboveCutoff = true;
 	
 	public int getLeaguePoints() {
-		return leaguePoints;
+		if (this.isMakeup()){
+			return leaguePoints-3;
+		} else {
+			return leaguePoints;
+		}
 	}
 	public void setLeaguePoints(int leaguePoints) {
 		this.leaguePoints = leaguePoints;
@@ -66,4 +71,16 @@ public class LeaguePoints {
 	public void setPopulated(boolean populated) {
 		this.populated = populated;
 	}
+	public boolean isAboveCutoff() {
+		return aboveCutoff;
+	}
+	public void setAboveCutoff(boolean aboveCutoff) {
+		this.aboveCutoff = aboveCutoff;
+	}
+	@Override
+	public String toString() {
+		return "LeaguePoints [leaguePoints=" + leaguePoints + ", matchNum="
+				+ matchNum + ", aboveCutoff=" + aboveCutoff + "]";
+	}
+	
 }
