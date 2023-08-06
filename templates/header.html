@@ -1,13 +1,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+        <title>PA Steel League Match Standings</title>
+        <style type="text/css" title="currentStyle">
+           @import "/datatables/DataTables-1.10.0/media/css/jquery.dataTables.css";
+     </style>
+
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+
+
+
+
+
+<!--
+<head>
 	<title>PA Steel League Match Standings</title>
 	<style type="text/css" title="currentStyle">
            @import "http://steelshooters.com/datatables/DataTables-1.10.0/media/css/jquery.dataTables.css";
      </style>
 	
 	<script type="text/javascript" language="javascript" src="http://steelshooters.com/datatables/DataTables-1.10.0/media/js/jquery.js"></script>
-	<!-- <script type="text/javascript" language="javascript" src="http://steelshooters.com/datatables/DataTables-1.10.0/examples/examples_support/jquery.jeditable.js"></script> -->
         <script type="text/javascript" language="javascript" src="http://steelshooters.com/datatables/DataTables-1.10.0/media/js/jquery.dataTables.js"></script>
+        -->
 	<script type="text/javascript" charset="utf-8">
                         /* Define two custom functions (asc and desc) for string sorting */
                         jQuery.fn.dataTableExt.oSort['string-case-asc']  = function(x,y) {
@@ -22,42 +39,49 @@
                                 /* Build the DataTable with third column using our custom sort functions */
                                 $('#example1').dataTable( {
                                         "bPaginate": false,			
-                                        "aaSorting": [ [15,'desc'] ],
+                                        "aaSorting": [ [%%SORTCOL%%,'desc'], [%%SORTCOL1%%,'desc'] ],
                                         "aoColumnDefs": [
                                                 { "sType": 'string-case', "aTargets": [ 2 ] }
                                         ]
                                 });
                                 $('#example2').dataTable( {
                                         "bPaginate": false,
-                                        "aaSorting": [ [15,'desc'] ],
+                                        "aaSorting": [ [%%SORTCOL%%,'desc'], [%%SORTCOL1%%,'desc'] ],
                                         "aoColumnDefs": [
                                                 { "sType": 'string-case', "aTargets": [ 2 ] }
                                         ]
                                 }); 
                                 $('#example3').dataTable( {
                                         "bPaginate": false,
-                                        "aaSorting": [ [15,'desc'] ],
+                                        "aaSorting": [ [%%SORTCOL%%,'desc'], [%%SORTCOL1%%,'desc'] ],
                                         "aoColumnDefs": [
                                                 { "sType": 'string-case', "aTargets": [ 2 ] }
                                         ]
                                 }); 
                                 $('#example4').dataTable( {
                                         "bPaginate": false,
-                                        "aaSorting": [ [15,'desc'] ],
+                                        "aaSorting": [ [%%SORTCOL%%,'desc'], [%%SORTCOL1%%,'desc'] ],
                                         "aoColumnDefs": [
                                                 { "sType": 'string-case', "aTargets": [ 2 ] }
                                         ]
                                 }); 
                                 $('#example5').dataTable( {
                                         "bPaginate": false,
-                                        "aaSorting": [ [15,'desc'] ],
+                                        "aaSorting": [ [%%SORTCOL%%,'desc'], [%%SORTCOL1%%,'desc'] ],
                                         "aoColumnDefs": [
                                                 { "sType": 'string-case', "aTargets": [ 2 ] }
                                         ]
                                 }); 
                                 $('#example6').dataTable( {
                                         "bPaginate": false,
-                                        "aaSorting": [ [15,'desc'] ],
+                                        "aaSorting": [ [%%SORTCOL%%,'desc'], [%%SORTCOL1%%,'desc'] ],
+                                        "aoColumnDefs": [
+                                                { "sType": 'string-case', "aTargets": [ 2 ] }
+                                        ]
+                                });
+                                $('#example7').dataTable( {
+                                        "bPaginate": false,
+                                        "aaSorting": [ [%%SORTCOL%%,'desc'], [%%SORTCOL1%%,'desc'] ],
                                         "aoColumnDefs": [
                                                 { "sType": 'string-case', "aTargets": [ 2 ] }
                                         ]

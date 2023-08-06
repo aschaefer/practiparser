@@ -31,6 +31,7 @@ sed -i bak -e s/stage_number/stageNumber/g $defFile
 sed -i bak -e s/stage_uuid/stageUuid/g $defFile
 sed -i bak -e s/stage_targets/stageTargets/g $defFile
 sed -i bak -e s/stage_name/stageName/g $defFile
+sed -i bak -e s/stage_deleted/stageDeleted/g $defFile
 sed -i bak -e s/stage_classifier/stageClassifier/g $defFile
 sed -i bak -e s/stage_scoretype/stageScoretype/g $defFile
 sed -i bak -e s/stage_modifieddate/stageModifieddate/g $defFile
