@@ -60,7 +60,36 @@ public class LeagueScoreCompiler {
 		
 		util.openPscFile( PATH + "PASteelLeagueTopton7232023_iPhone.psc", "/tmp/league");
 		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", " Match " + matchNum, matchNum++);
+		
+		util.openPscFile( PATH + "PASteelLeagueBlueRidge862023_iPhone.psc", "/tmp/league");
+		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", " Match " + matchNum, matchNum++);
 
+		//Guthsville
+		util.openPscFile( PATH + "PASteelLeague8-13-2023Guthsville_iPhone.psc", "/tmp/league");
+		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", " Match " + matchNum, matchNum++);
+
+		//Ontelaunee
+		util.openPscFile( PATH + "PASteelLeagueOntelaunee8202023_iPhone.psc", "/tmp/league");
+		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", " Match " + matchNum, matchNum++);
+		
+		//Palmyra 9/10/2023
+		util.openPscFile( PATH + "PA_Steel_League_9-10-2023_Palmyra_Export.psc", "/tmp/league");
+		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", " Match " + matchNum, matchNum++);
+		
+		//Topton
+		util.openPscFile( PATH + "PASteelLeagueTopton9242023_iPhone.psc", "/tmp/league");
+		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", " Match " + matchNum, matchNum++);
+		
+		//Pricetown
+		util.openPscFile( PATH + "PASteelLeaguePricetown1012023_iPhone.psc", "/tmp/league");
+		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", " Match " + matchNum, matchNum++);
+
+		//Ontelaunee
+		util.openPscFile( PATH + "PASteelLeagueOntelaunee10292023_iPhone.psc", "/tmp/league");
+		compileMatchResults("/tmp/league/match_def.json", "/tmp/league/match_scores.json", " Match " + matchNum, matchNum++);
+
+		
+		
 		
 		/*
 		 * 2022
@@ -666,7 +695,8 @@ public class LeagueScoreCompiler {
 	}
 	private static String getClubName(int matchNumber) {
 		String[] matchList = {"Lower Providence","Guthsville","Pricetown","Blue Ridge","Palmyra","Lower Providence","Topton","Blue Ridge","Guthsville","Ontelaunee","Palmyra","Topton", "Pricetown","Ontelaunee"};
-		return matchList[matchNumber+1];
+		String club = matchList[matchNumber-1];
+		return club;
 /*
 		if (matchNumber == 1){
 			return "Topton";
